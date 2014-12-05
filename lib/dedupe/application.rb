@@ -4,7 +4,6 @@ module Dedupe
 
     def initialize(args = {})
       @input = args[:input] || $stdin
-      puts "started"
     end
 
     def process_file(filename)

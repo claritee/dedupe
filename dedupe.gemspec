@@ -18,7 +18,13 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  spec.required_ruby_version = '~> 2.1'
+
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.1.0"
+  spec.add_development_dependency 'pry'
+  spec.add_development_dependency "pry-debugger"
+  spec.add_development_dependency "pry-doc"
+  spec.add_development_dependency "pry-stack_explorer"
 end

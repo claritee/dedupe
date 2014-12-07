@@ -1,5 +1,5 @@
 require 'dedupe/application'
-require 'dedupe/deduper'
+require 'dedupe/merger'
 require 'dedupe/sorter'
 require 'dedupe/version'
 

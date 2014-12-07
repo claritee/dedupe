@@ -29,17 +29,21 @@ module Dedupe
 
     def sort_buckets(segments)
       segments.each do |key, values|
-        bucket_on_disk = @buckets[key] || bucket_filename(key)
-        file = File.open(bucket_on_disk, 'w+')
-        lines = [file.readlines, values]
-        file.close
+        lines = read_bucket(bucket_filename(key), values)
         sorted = SortedSet.new(lines.flatten)
         write_new_buckets(sorted.to_a, key)
       end
     end
 
     def bucket_filename(key)
-      "#{key}.txt"
+      @buckets[key] || "#{key}.txt"
+    end
+
+    def read_bucket(bucket_filename, values)
+      file = File.open(bucket_filename, 'w+')
+      lines = [file.readlines, values]
+      file.close
+      lines
     end
 
     def write_new_buckets(sorted, key)

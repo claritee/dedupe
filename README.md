@@ -35,10 +35,14 @@ Build the gem
 
 Run the program
       
-      bin/run_program.rb <textfile>
+      bin/run_program.rb $input_file
       e.g. 
       bin/run_program.rb spec/data/KW_File.csv
 
 Run tests (located in the specs directory)
 
       rspec
+      
+To check the output (on a Unix-like OS)
+      
+      sort -u $input_file > $output_file

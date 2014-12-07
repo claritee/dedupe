@@ -1,31 +1,44 @@
 # Dedupe
 
-TODO: Write a gem description
+This program deduplicates and sorts a large word file.
 
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'dedupe'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install dedupe
 
 ## Usage
 
-TODO: Write usage instructions here
+### Install Ruby
+First you need to install Ruby. The current supported version is Ruby 2.1 or above.
 
-## Contributing
+Please refer to https://www.ruby-lang.org/en/installation/
 
-1. Fork it ( https://github.com/[my-github-username]/dedupe/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+Then check the version of Ruby via:
+
+     ruby -v
+
+
+### Install Bundler
+
+Bundler is used to download Ruby dependencies in projects
+
+Please follow the getting started guide here http://bundler.io/
+
+      gem install bundler
+
+### Run the project
+
+Install dependencies
+
+      bundle install
+
+Build the gem
+      
+      rake install
+
+Run the program
+      
+      bin/run_program.rb <textfile>
+      e.g. 
+      bin/run_program.rb spec/data/KW_File.csv
+
+Run tests
+
+      rspec

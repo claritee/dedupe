@@ -39,6 +39,6 @@ Run the program
       e.g. 
       bin/run_program.rb spec/data/KW_File.csv
 
-Run tests
+Run tests (located in the specs directory)
 
       rspec

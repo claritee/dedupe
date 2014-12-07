@@ -27,23 +27,29 @@ module Dedupe
     # Returns the sorted and deduped result filename
     def run
       fail('Unable to dedup and sort. No filename provided') and return unless @filename
-
-      file = File.new(@filename)
-      fail("Unable to dedupe and sort. #{@filename} does not exist") and return unless file
-
-      sort_dedupe_merge(file)
-      file.close
+      fail("Unable to dedupe and sort. #{@filename} does not exist") and return unless File.exists?(@filename)
+      sort_dedupe_merge
     end
 
     private
 
-    def sort_dedupe_merge(file)
-      lines = file.readlines(@bucket_size)
-      if lines.count < @bucket_size
-        #sort and dedupe
-      else
-        #keep sorting, then merge
-      end
+    def sort_dedupe_merge
+      sorter = Dedupe::Sorter.new
+      sort(sorter)
+      merge(sorter.buckets)
+      clean_up(sorter.buckets)
+    end
+
+    def sort(sorter)
+      File.foreach(@filename).each_slice(@bucket_size) { |lines| sorter.sort(lines) }
+    end
+
+    def merge(buckets)
+      Dedupe::Merger.new.merge('deduped_sorted_result.txt', buckets)
+    end
+
+    def clean_up(buckets)
+      buckets.each { |key, filename| File.delete(filename) }
     end
   end
 end

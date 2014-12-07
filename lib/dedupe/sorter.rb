@@ -1,18 +1,25 @@
+require 'set'
+
+# Public: Class that handles sorting the input.
+# Each input is added to it's bucket and sorted by alphabetical order.
+# Duplicates are removed as a part of this process.
+# Buckets are saved on disk and updated with new unique elements
+#
+# Examples
+#
+#   Dedupe::Sorter.new.sort(lines)
+#
 module Dedupe
   class Sorter
 
-    DEFAULT_BUCKET_SIZE = 200
-
     attr_reader :buckets
 
-    def initialize(bucket_size = DEFAULT_BUCKET_SIZE)
+    def initialize
       @buckets = {}
-      @bucket_size = bucket_size
     end
 
     def sort(lines)
-      segments = partition(lines)
-      sort_buckets(segments)
+      sort_buckets(partition(lines))
     end
 
     private
@@ -24,14 +31,14 @@ module Dedupe
     end
 
     def add_element_to_partition(segments, key, value)
-      segments[key.to_sym].nil? ? segments[key.to_sym] = [value] : segments[key.to_sym] << value
+      segments[key.to_sym] = segments[key.to_sym].nil? ? [value] : segments[key.to_sym] << value
     end
 
     def sort_buckets(segments)
       segments.each do |key, values|
-        lines = read_bucket(bucket_filename(key), values)
-        sorted = SortedSet.new(lines.flatten)
-        write_new_buckets(sorted.to_a, key)
+        lines = add_to_bucket(bucket_filename(key), values)
+        sorted = lines.sort.uniq
+        write_new_buckets(sorted, key)
       end
     end
 
@@ -39,17 +46,14 @@ module Dedupe
       @buckets[key] || "#{key}.txt"
     end
 
-    def read_bucket(bucket_filename, values)
-      file = File.open(bucket_filename, 'w+')
-      lines = [file.readlines, values]
-      file.close
-      lines
+    def add_to_bucket(bucket_filename, values)
+      File.exists?(bucket_filename) ? File.readlines(bucket_filename).concat(values) : values
     end
 
     def write_new_buckets(sorted, key)
+      @buckets[key.to_sym] = bucket_filename(key)
       output = File.open(bucket_filename(key), 'w+')
       sorted.each { |line| output << line }
-      @buckets[key.to_sym] = bucket_filename(key)
       output.close
     end
   end

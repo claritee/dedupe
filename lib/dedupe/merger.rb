@@ -1,12 +1,16 @@
+# Public: Class that handles merging all the sorted buckets
+# Each bucket on disk is read and written to an output file
+#
+# Examples
+#
+#   Dedupe::Merger.new.sort('output.txt', buckets)
+#
 module Dedupe
   class Merger
     def merge(output, buckets)
       output_file = File.open(output, 'w+')
       buckets.keys.sort.each do |key|
-        bucket = File.open(buckets[key], 'r')
-        lines = bucket.readlines
-        lines.each { |line| output_file << format_line(line) }
-        bucket.close
+        File.readlines(buckets[key]).each { |line| output_file << format_line(line) }
       end
       output_file.close
     end
